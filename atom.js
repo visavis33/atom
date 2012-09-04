@@ -1,8 +1,6 @@
-// Atom Modal Popup
+// Atom Modal Dialog
 (function ($) {
-	var doc = $(document),
-		wndw = $(window),
-		q = [], next = false;
+	var queue = [], next = false;
 		
 	/*
 	 * Create and display a modal dialog.
@@ -51,6 +49,8 @@
 		 */
 		init: function (data, options) {
 			var a = this;
+			
+			//push the modal onto the queue
 			q.push(function(){
 				// merge defaults and user options
 				a.o = $.extend({}, $.atom.defaults, options);
@@ -67,8 +67,9 @@
 				}
 			});
 			
-			if(!next && q.length > 0){
-				q.shift()();
+			// shift the queue
+			if(!next && queue.length > 0){
+				queue.shift()();
 				next = true;
 			}
 		},
@@ -92,7 +93,7 @@
 				.append(data)
 				.appendTo('body');
 
-			// center the dialog
+			// center the modal
 			a.center();
 		},
 		/*
@@ -116,7 +117,7 @@
 			}
 
 			// update window size
-			wndw.bind('resize.atom orientationchange.atom', function () {
+			$(window).bind('resize.atom orientationchange.atom', function () {
 				// center the dialog
 				a.center();
 			});
@@ -126,13 +127,13 @@
 		 */
 		unbindEvents: function () {
 			$('.' + this.o.closeClass).unbind('click.atom');
-			wndw.unbind('.atom');
+			$(window).unbind('.atom');
 			this.d.mask.unbind('click.atom');
 		},
 		center: function () {
 			var a = this,
-				hc = (wndw.height()/2) - (a.d.modal.outerHeight(true)/2),
-				wc = (wndw.width()/2) - (a.d.modal.outerWidth(true)/2);
+				hc = ($(window).height()/2) - (a.d.modal.outerHeight(true)/2),
+				wc = ($(window).width()/2) - (a.d.modal.outerWidth(true)/2);
 				
 			a.d.modal.css({left: wc, top: hc});
 		},
@@ -169,8 +170,9 @@
 			// reset the dialog object
 			a.d = {};
 			
-			next = (q.length > 0) ? true : false;
-			if(next) q.shift()();
+			// shift the queue
+			next = queue.length > 0 ? true : false;
+			if(next) queue.shift()();
 		}
 	}
 
