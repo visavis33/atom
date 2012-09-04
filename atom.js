@@ -2,7 +2,7 @@
 (function ($) {
 	var doc = $(document),
 		wndw = $(window),
-		q = [], on = false;
+		q = [], next = false;
 		
 	/*
 	 * Create and display a modal dialog.
@@ -67,9 +67,9 @@
 				}
 			});
 			
-			if(!on && q.length > 0){
+			if(!next && q.length > 0){
 				q.shift()();
-				on = true;
+				next = true;
 			}
 		},
 		/*
@@ -169,12 +169,8 @@
 			// reset the dialog object
 			a.d = {};
 			
-			if(q.length > 0){
-				q.shift()();
-				on = true;
-			} else {
-				on = false;
-			}
+			next = (q.length > 0) ? true : false;
+			if(next) q.shift()();
 		}
 	}
 
