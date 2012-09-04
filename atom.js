@@ -51,7 +51,7 @@
 			var a = this;
 			
 			//push the modal onto the queue
-			q.push(function(){
+			queue.push(function(){
 				// merge defaults and user options
 				a.o = $.extend({}, $.atom.defaults, options);
 
