@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			.atomMask { 
+				position: fixed; 
+				top: 0; 
+				left: 0;
+				width:100%; 
+				height:100%; 
+				background-color:#fff; 
+				opacity:.8; 
+				filter: alpha(opacity=80); 
+				z-index:500; 
+			}
+
+			.atomModal { 
+				position: fixed; 
+				width:300px; 
+				background-color:#eee; 
+				z-index:501; 
+				padding:10px; 
+				border:1px solid #333; 
+				border-radius:5px; 
+				box-shadow:0 0 10px #000;
+			}
+
+			.atomClose { 
+				position: absolute; 
+				top:5px; 
+				right: 5px;
+			}
+
+			.atomClose:hover { 
+				color:#f00; 
+				cursor:pointer; 
+			}
+
+			.atomModal.blueBackground { background-color:#ACF; border:2px solid #00f;}
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+		<script src="atom.min.js"></script>
+		<script>
+			$(function() {
+ 				$("#defaultPop").on("click", function(e){
+ 					e.preventDefault();
+ 					$.atom("<h1>Standard Popup</h1>");
+ 				});
+ 				
+ 				$("#modalPop").on("click", function(e){
+ 					e.preventDefault();
+ 					$.atom("<h1>Standard Popup</h1>", { 
+ 						maskClose: true 
+ 					});
+ 				});
+ 				
+ 				$("#noClosePop").on("click", function(e){
+ 					e.preventDefault();
+ 					$.atom("<h1>Modal Popup</h1>", { 
+ 						close: false,
+ 						maskClose: true
+ 					});
+ 				});
+ 				
+ 				$("#callbackPop").on("click", function(e){
+ 					e.preventDefault();
+ 					$.atom("<h1>No Close Button Popup</h1>", { 
+ 						onOpen : function(){ alert('on open'); },
+ 						onShow : function(){ alert('on show'); },
+ 						onClose : function(){ alert('on close'); },
+ 						closeHTML : "<b>Close</b>",
+						modalClass : "atomModal blueBackground"
+ 					});
+ 				});
+ 				
+ 				$("#queuePop").on("click", function(e){
+ 					e.preventDefault();
+ 					$.atom("123", { onOpen : function(){alert('123 open')}, onShow : function(){alert('123 show')}, onClose : function(){alert('123 close')} });
+					$.atom("456", { modalClass : "atomModal blueBackground" });
+					$.atom("789", { onOpen : function(){alert('789 open')}, onShow : function(){alert('789 show')}, onClose : function(){alert('789 close')} });
+ 				});
+			});
+		</script>
+	</head>
+	<body style="height:1000;">
+		<header>
+			<h1>Atom Demo Page</h1>
+		</header>
+		<section>
+			<p>This is the atom test page</p>
+			<ul>
+				<li><a href="#" id="defaultPop">Popup with no config, just default values</a></li>
+				<li><a href="#" id="modalPop">Pop with maskClose true (click mask to close)</a></li>
+				<li><a href="#" id="noClosePop">Popup with no close button</a></li>
+				<li><a href="#" id="callbackPop">Popup with callbacks and custom close html</a></li>
+				<li><a href="#" id="queuePop">Popups will be queued if you try to open many at the same time</a></li>
+			</ul>
+		</section>
+	</body>
+</html>
