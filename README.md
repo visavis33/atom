@@ -1,16 +1,18 @@
 atom
-A light-weight modal jquery plugin that is easy to use.
+====
 
-Once the script is included, you can call the popup like this:
+A light-weight modal dialog built with jQuery.
 
-$.atom.open("<div>my html</div>");
+Once jQuery and atom.js are included, you can call the popup like this:
+
+	$.atom("my html");
+	
 To hide, you can click the close button, or manually call:
 
-$.atom.close()
+	$.atom.close();
+	
+To override atom's configuration defaults:
 
-	/*
-	 * Atom default options
-	 */
 	$.atom.defaults = {
 		maskClass: 'atomMask',
 		modalClass: 'atomModal',
