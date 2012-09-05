@@ -1,19 +1,17 @@
 // Atom Modal Dialog
 (function ($) {
-	var queue = [], next = false;
-		
 	/*
-	 * Create and display a modal dialog.
+	 * Create and display a modal dialog
 	 *
 	 * @param {string} an html string
 	 * @param {object} [options] An optional object containing options overrides
 	 */
 	$.atom = function (html, options) {
-		return $.atom.impl.init(html, options);
+		return $.atom.impl.open(html, options);
 	};
 	
 	/*
-	 * Close the modal dialog.
+	 * Close the modal dialog
 	 */
 	$.atom.close = function () {
 		$.atom.impl.close();
@@ -28,135 +26,81 @@
 		close: true,
 		closeHTML: '&#x2716;',
 		closeClass: 'atomClose',
-		maskClose: false,
 		onOpen: null,
-		onShow: null,
 		onClose: null
 	};
 	
 	/*
-	 * Main modal object
-	 * o = options
+	 * Atom dialog implementation
 	 */
 	$.atom.impl = {
 		/*
-		 * Contains the modal dialog elements and is the object passed
-		 * back to the callback (onOpen, onShow, onClose) functions
+		 * Data contains the modal dialog elements and is the object passed
+		 * back to the callback (onOpen, onClose) functions
 		 */
 		d: {},
 		/*
-		 * Initialize the modal dialog
+		 * Queue contains the array for calling multiple modal dialog elements
+		 * sequentially without overlapping
 		 */
-		init: function (data, options) {
+		q: [],
+		/*
+		 * Open the modal dialog
+		 */
+		open: function (html, options) {
 			var a = this;
 			
 			//push the modal onto the queue
-			queue.push(function(){
+			a.q.push(function(){
 				// merge defaults and user options
 				a.o = $.extend({}, $.atom.defaults, options);
 
-				// create the mask and modal
-				a.create(data);
+				// create the mask
+				a.d.mask = $(document.createElement('div'))
+					.addClass(a.o.maskClass)
+					.appendTo('body');
+				
+				// create the modal
+				a.d.modal = $(document.createElement('div'))
+					.addClass(a.o.modalClass)
+					.append(a.o.close ? $(document.createElement('a'))
+						.addClass(a.o.closeClass)
+						.append(a.o.closeHTML)
+						.bind('click.atom', function (e) {
+							e.preventDefault();
+							a.close();
+						}) : '')
+					.append(html)
+					.appendTo('body');
+					
+				// bind window resize to center the dialog
+				$(window).bind('resize.atom orientationchange.atom', function () {
+					a.d.modal.css({
+						top: this.innerHeight/2 - a.d.modal.outerHeight(true)/2,
+						left: this.innerWidth/2 - a.d.modal.outerWidth(true)/2
+					});
+				}).resize();
 
-				// display the modal dialog
-				a.open();
-
-				// execute the onShow callback
-				if ($.isFunction(a.o.onShow)) {
-					a.o.onShow.apply(a, [a.d]);
+				// execute the onOpen callback
+				if ($.isFunction(a.o.onOpen)) {
+					a.o.onOpen.apply(a, [a.d]);
 				}
 			});
 			
 			// shift the queue
-			if(!next && queue.length > 0){
-				queue.shift()();
-				next = true;
+			if(a.q.length > 0 && !a.d.modal) {
+				a.q.shift()();
 			}
 		},
 		/*
-		 * Create and add the modal overlay and container to the page
+		 * Close the modal dialog
 		 */
-		create: function (data) {
-			var a = this;
-
-			// create the mask
-			a.d.mask = $('<div></div>')
-				.addClass(a.o.maskClass)
-				.css('display', 'none')
-				.appendTo('body');
-
-			// create the modal
-			a.d.modal = $('<div></div>')
-				.addClass(a.o.modalClass)
-				.css('display', 'none')
-				.append(a.o.close && a.o.closeHTML ? $('<a></a>').addClass(a.o.closeClass).append(a.o.closeHTML) : '')
-				.append(data)
-				.appendTo('body');
-
-			// center the modal
-			a.center();
-		},
-		/*
-		 * Bind events
-		 */
-		bindEvents: function () {
-			var a = this;
-
-			// bind the close event to any element with the closeClass class
-			$('.' + a.o.closeClass).bind('click.atom', function (e) {
-				e.preventDefault();
-				a.close();
-			});
-
-			// bind the overlay click to the close function, if enabled
-			if (a.o.maskClose) {
-				a.d.mask.bind('click.atom', function (e) {
-					e.preventDefault();
-					a.close();
-				});
-			}
-
-			// update window size
-			$(window).bind('resize.atom orientationchange.atom', function () {
-				// center the dialog
-				a.center();
-			});
-		},
-		/*
-		 * Unbind events
-		 */
-		unbindEvents: function () {
-			$('.' + this.o.closeClass).unbind('click.atom');
-			$(window).unbind('.atom');
-			this.d.mask.unbind('click.atom');
-		},
-		center: function () {
-			var a = this,
-				hc = ($(window).height()/2) - (a.d.modal.outerHeight(true)/2),
-				wc = ($(window).width()/2) - (a.d.modal.outerWidth(true)/2);
-				
-			a.d.modal.css({left: wc, top: hc});
-		},
-		open: function () {
-			var a = this;
-
-			// execute the onOpen callback
-			if ($.isFunction(a.o.onOpen)) {
-				a.o.onOpen.apply(a, [a.d]);
-			}
-			
-			// display the remaining elements
-			a.d.mask.show();
-			a.d.modal.show();
-
-			// bind default events
-			a.bindEvents();
-		},
 		close: function () {
 			var a = this;
 
-			// remove the default events
-			a.unbindEvents();
+			// unbind the events
+			$('.' + a.o.closeClass).unbind('click.atom');
+			$(window).unbind('.atom');
 
 			// execute the onClose callback
 			if ($.isFunction(a.o.onClose)) {
@@ -171,8 +115,9 @@
 			a.d = {};
 			
 			// shift the queue
-			next = queue.length > 0 ? true : false;
-			if(next) queue.shift()();
+			if(a.q.length > 0) {
+				a.q.shift()();
+			}
 		}
 	}
 
