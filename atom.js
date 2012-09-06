@@ -8,7 +8,7 @@
 		 * Data contains the modal dialog elements and is the object passed
 		 * back to the callback (onOpen, onClose) functions
 		 */
-		d: {},
+		d: null,
 		/*
 		 * Queue contains the array for calling multiple modal dialog elements
 		 * sequentially without overlapping
@@ -48,7 +48,7 @@
 		});
 			
 		// shift the queue
-		if(a.q.length > 0 && !a.d.modal) {
+		if(a.q.length > 0 && !a.d) {
 			a.q.shift()();
 		}
 	};
@@ -64,7 +64,7 @@
 		a.d.remove();
 
 		// reset the dialog object
-		a.d = {};
+		a.d = null;
 			
 		// shift the queue
 		if(a.q.length > 0) {
@@ -77,7 +77,7 @@
 	 */
 	$.atom.defaults = {
 		outerClass: 'atom',
-		innerClass: null,
+		innerClass: '',
 		close: true,
 		closeHTML: '&#x2716;',
 		onOpen: $.noop,
