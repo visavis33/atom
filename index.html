@@ -2,23 +2,27 @@
 <html>
 	<head>
 		<style>
-			.atomMask { 
-				position: fixed; 
-				top: 0; 
+			.atomAlpha { 
+				position: absolute; 
+				top: 0;
 				left: 0;
-				width:100%; 
-				height:100%; 
-				background-color:#fff; 
-				opacity:.8; 
-				filter: alpha(opacity=80); 
-				z-index:500; 
+				right: 0;
+				bottom: 0;
+				/* Fallback for web browsers that doesn't support RGBa */
+				background: rgb(255, 255, 255);
+				/* RGBa with 0.6 opacity */
+				background: rgba(255, 255, 255, 0.8);
+				/* For IE 5.5 - 7*/
+				filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#ccffffff, endColorstr=#ccffffff);
+				/* For IE 8*/
+				-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#ccffffff, endColorstr=#ccffffff)";
 			}
-
+			
 			.atomModal { 
-				position: fixed; 
+				position: relative;
+				margin: 50px auto 0;
 				width:300px; 
 				background-color:#eee; 
-				z-index:501; 
 				padding:10px; 
 				border:1px solid #333; 
 				border-radius:5px; 
@@ -39,7 +43,7 @@
 			.atomModal.blueBackground { background-color:#ACF; border:2px solid #00f;}
 		</style>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-		<script src="atom.js"></script>
+		<script src="atom2.js"></script>
 		<script>
 			$(function() {
  				$("#defaultPop").on("click", function(e){
