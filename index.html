@@ -2,23 +2,19 @@
 <html>
 	<head>
 		<style>
-			.atomAlpha { 
+			.atom { 
 				position: absolute; 
 				top: 0;
 				left: 0;
 				right: 0;
 				bottom: 0;
-				/* Fallback for web browsers that doesn't support RGBa */
-				background: rgb(255, 255, 255);
 				/* RGBa with 0.6 opacity */
 				background: rgba(255, 255, 255, 0.8);
-				/* For IE 5.5 - 7*/
-				filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#ccffffff, endColorstr=#ccffffff);
-				/* For IE 8*/
-				-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#ccffffff, endColorstr=#ccffffff)";
+				/* Fallback for IE 5.5 - 8*/
+				filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99ffffff, endColorstr=#99ffffff);
 			}
 			
-			.atomModal { 
+			.atom > div { 
 				position: relative;
 				margin: 50px auto 0;
 				width:300px; 
@@ -29,26 +25,26 @@
 				box-shadow:0 0 10px #000;
 			}
 
-			.atomClose { 
+			.atom .close { 
 				position: absolute; 
 				top:5px; 
 				right: 5px;
 			}
 
-			.atomClose:hover { 
+			.atom .close:hover { 
 				color:#f00; 
 				cursor:pointer; 
 			}
 
-			.atomModal.blueBackground { background-color:#ACF; border:2px solid #00f;}
+			.atom .blue { background-color:#ACF; border:2px solid #00f; }
 		</style>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-		<script src="atom2.js"></script>
+		<script src="atom.js"></script>
 		<script>
 			$(function() {
  				$("#defaultPop").on("click", function(e){
  					e.preventDefault();
- 					$.atom("<h1>Standard Popup</h1>");
+ 					$.atom("<div><h1>Standard Popup</h1></div>");
  				});
  				
  				$("#noClosePop").on("click", function(e){
@@ -64,14 +60,14 @@
  						onOpen : function(){ alert('on open'); },
  						onClose : function(){ alert('on close'); },
  						closeHTML : "<b>Close</b>",
-						modalClass : "atomModal blueBackground"
+						innerClass : "blue"
  					});
  				});
  				
  				$("#queuePop").on("click", function(e){
  					e.preventDefault();
  					$.atom("123", { onOpen : function(){alert('123 open')}, onClose : function(){alert('123 close')} });
-					$.atom("456", { modalClass : "atomModal blueBackground" });
+					$.atom("456", { innerClass : "blue" });
 					$.atom("789", { onOpen : function(){alert('789 open')}, onClose : function(){alert('789 close')} });
  				});
 			});

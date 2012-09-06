@@ -14,11 +14,10 @@ To hide, you can click the close button, or manually call:
 To override atom's configuration defaults:
 
 	$.atom.defaults = {
-		maskClass: 'atomMask',
-		modalClass: 'atomModal',
+		outerClass: 'atom',
+		innerClass: '',
 		close: true,
 		closeHTML: '&#x2716;',
-		closeClass: 'atomClose',
-		onOpen: null,
-		onClose: null
+		onOpen: $.noop,
+		onClose: $.noop
 	};
