@@ -1,43 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<style>
-			.atom { 
-				position: absolute; 
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				/* RGBa with 0.6 opacity */
-				background: rgba(255, 255, 255, 0.8);
-				/* Fallback for IE 5.5 - 8*/
-				filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99ffffff, endColorstr=#99ffffff);
-			}
-			
-			.atom > div { 
-				position: relative;
-				margin: 50px auto 0;
-				width:300px; 
-				background-color:#eee; 
-				padding:10px; 
-				border:1px solid #333; 
-				border-radius:5px; 
-				box-shadow:0 0 10px #000;
-			}
-
-			.atom .close { 
-				position: absolute; 
-				top:5px; 
-				right: 5px;
-			}
-
-			.atom .close:hover { 
-				color:#f00; 
-				cursor:pointer; 
-			}
-
-			.atom .blue { background-color:#ACF; border:2px solid #00f; }
-		</style>
+		<link rel="stylesheet" type="text/css" href="atom.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
 		<script src="atom.js"></script>
 		<script>
@@ -49,26 +13,17 @@
  				
  				$("#noClosePop").on("click", function(e){
  					e.preventDefault();
- 					$.atom("<h1>No Close. Use $.atom.close() to close</h1>", { 
+ 					$.atom("<h1>No Close Button. Click background to close</h1>", { 
  						close: false
  					});
  				});
  				
- 				$("#callbackPop").on("click", function(e){
+ 				$("#stylePop").on("click", function(e){
  					e.preventDefault();
- 					$.atom("<h1>No Close Button Popup</h1>", { 
- 						onOpen : function(){ alert('on open'); },
- 						onClose : function(){ alert('on close'); },
+ 					$.atom("<h1>Blue Styled Popup With Custom Close HTML</h1>", { 
  						closeHTML : "<b>Close</b>",
 						innerClass : "blue"
  					});
- 				});
- 				
- 				$("#queuePop").on("click", function(e){
- 					e.preventDefault();
- 					$.atom("123", { onOpen : function(){alert('123 open')}, onClose : function(){alert('123 close')} });
-					$.atom("456", { innerClass : "blue" });
-					$.atom("789", { onOpen : function(){alert('789 open')}, onClose : function(){alert('789 close')} });
  				});
 			});
 		</script>
@@ -82,8 +37,7 @@
 			<ul>
 				<li><a href="#" id="defaultPop">Popup with no config, just default values</a></li>
 				<li><a href="#" id="noClosePop">Popup with no close button</a></li>
-				<li><a href="#" id="callbackPop">Popup with callbacks and custom close html</a></li>
-				<li><a href="#" id="queuePop">Popups will be queued if you try to open many at the same time</a></li>
+				<li><a href="#" id="stylePop">Popup with callbacks and custom close html</a></li>
 			</ul>
 		</section>
 	</body>
