@@ -25,6 +25,15 @@
 						innerClass : "blue"
  					});
  				});
+ 				
+ 				$("#callbackPop").on("click", function(e){
+ 					e.preventDefault();
+ 					$.atom("<div><h1>Callback Popup</h1></div>", {
+ 						callback : function(a) {
+ 							console.log("a", a);
+ 						}
+ 					});
+ 				});
 			});
 		</script>
 	</head>
@@ -37,7 +46,8 @@
 			<ul>
 				<li><a href="#" id="defaultPop">Popup with no config, just default values</a></li>
 				<li><a href="#" id="noClosePop">Popup with no close button</a></li>
-				<li><a href="#" id="stylePop">Popup with callbacks and custom close html</a></li>
+				<li><a href="#" id="stylePop">Popup with custom styling and close html</a></li>
+				<li><a href="#" id="callbackPop">Popup with a callback</a></li>
 			</ul>
 		</section>
 	</body>

@@ -13,5 +13,6 @@ To override atom's configuration defaults:
 		outerClass: 'atom',
 		innerClass: '',
 		close: true,
-		closeHTML: '&#x2716;'
+		closeHTML: '&#x2716;',
+		callback : $.noop
 	};

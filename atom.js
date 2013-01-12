@@ -23,6 +23,9 @@
 						.on('click', function () { a.remove(); }) : '')
 					.append(h))
 				.appendTo('body');
+			
+		// activate callback function		
+		s.callback.apply(null, [a]);
 	};
 
 	/*
@@ -32,6 +35,7 @@
 		outerClass: 'atom',
 		innerClass: '',
 		close: true,
-		closeHTML: '&#x2716;'
+		closeHTML: '&#x2716;',
+		callback: $.noop
 	};
 })(jQuery);
